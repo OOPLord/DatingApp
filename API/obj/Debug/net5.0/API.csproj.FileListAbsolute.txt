@@ -68,3 +68,8 @@ D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\AutoMapper.dll
 D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\CloudinaryDotNet.dll
 D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\Newtonsoft.Json.dll
+D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\Microsoft.Extensions.Identity.Core.dll
+D:\Learning\Udemy\ASP.NET\Angular\DatingApp\API\bin\Debug\net5.0\Microsoft.Extensions.Identity.Stores.dll

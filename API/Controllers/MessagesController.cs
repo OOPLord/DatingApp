@@ -1,0 +1,72 @@
+﻿using API.DTOs;
+using API.Extensions;
+using API.Helpers;
+using API.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API.Controllers
+{
+    public class MessagesController : BaseApiController
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public MessagesController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser([FromQuery] MessageParams messageParams)
+        {
+            messageParams.UserName = User.GetUserName();
+
+            var messages = await _unitOfWork.MessageRespository.GetMessagesForUser(messageParams);
+
+            Response.AddPaginationHeader(messages.CurrentPage,
+                messages.PageSize,
+                messages.TotalCount,
+                messages.TotalPages);
+
+            return messages;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMessage(int id)
+        {
+            var userName = User.GetUserName();
+
+            var message = await _unitOfWork.MessageRespository.GetMessage(id);
+
+            if(message.Sender.UserName != userName && message.Recipient.UserName != userName)
+            {
+                return Unauthorized();
+            }
+
+            if(message.Sender.UserName == userName)
+            {
+                message.SenderDeleted = true;
+            }
+
+            if(message.Recipient.UserName == userName)
+            {
+                message.RecipientDeleted = true;
+            }
+
+            if(message.SenderDeleted && message.RecipientDeleted)
+            {
+                _unitOfWork.MessageRespository.DeleteMessage(message);
+            }
+
+            if(await _unitOfWork.Complete())
+            {
+                return Ok();
+            }
+
+            return BadRequest("Message was not deleted");
+        }
+    }
+}
