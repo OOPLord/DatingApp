@@ -70,15 +70,6 @@ namespace API.Data
         }
 
         /// <summary>
-        /// saves all users to database async
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 1;
-        }
-
-        /// <summary>
         /// Updates user state
         /// </summary>
         /// <param name="user"></param>
@@ -98,6 +89,13 @@ namespace API.Data
             query = query.Where(user => user.UserName != userParams.CurrentUserName);
             query = query.Where(user => user.Gender == userParams.Gender);
 
+            var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+            var maxDob = DateTime.Today.AddDays(-userParams.MinAge);
+
+            query = query.Where(user => user.DateOfBirth >= minDob && user.DateOfBirth <= maxDob);
+
+            // ToDo: filter
+
             return await PagedList<MemberDto>.CreateAsync(
                 query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider).AsNoTracking(),
                 userParams.PageNumber,
@@ -115,6 +113,14 @@ namespace API.Data
                 .Where(user => user.UserName.Equals(username))
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<string> GetUserGender(string userName)
+        {
+            return await _context.Users
+                .Where(user => user.UserName == userName)
+                .Select(user => user.Gender)
+                .FirstOrDefaultAsync();
         }
     }
 }
